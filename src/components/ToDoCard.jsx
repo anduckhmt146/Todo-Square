@@ -54,16 +54,35 @@ const TodoCard = ({ category, urgency }) => {
             key={index}
             className="flex flex-col sm:flex-row justify-between items-center bg-gray-100 rounded-lg p-2">
             {editIndex === index ? (
-              <input
-                type="text"
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-                className="flex-grow border-2 border-gray-200 p-1 rounded"
-              />
+              <div className="flex-grow flex">
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      saveEdit();
+                    }
+                  }}
+                  className="flex-grow border-2 border-gray-200 p-1 rounded"
+                />
+                <button
+                  onClick={saveEdit}
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs sm:text-sm ml-2">
+                  Save
+                </button>
+                <button
+                  onClick={cancelEditing}
+                  className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded text-xs sm:text-sm ml-2">
+                  Cancel
+                </button>
+              </div>
             ) : (
-              <div className="lg:flex-grow lg:flex items-center justify-between">
-                <span className="break-all">{task}</span>
-                <div className="flex space-x-1 lg:ml-2 my-2">
+              <span className="break-all">{task}</span>
+            )}
+            <div className="flex space-x-1 sm:ml-2 my-2">
+              {editIndex !== index && (
+                <>
                   <button
                     onClick={() => startEditing(index)}
                     className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded text-xs sm:text-sm">
@@ -74,9 +93,9 @@ const TodoCard = ({ category, urgency }) => {
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs sm:text-sm">
                     Remove
                   </button>
-                </div>
-              </div>
-            )}
+                </>
+              )}
+            </div>
           </li>
         ))}
       </ul>
@@ -85,6 +104,11 @@ const TodoCard = ({ category, urgency }) => {
           type="text"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              addTask();
+            }
+          }}
           className="flex-grow border-2 border-gray-200 py-1 px-2 rounded-lg"
           placeholder="Add a task"
         />
